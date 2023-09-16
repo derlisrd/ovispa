@@ -12,7 +12,7 @@ class AuthProvider extends ChangeNotifier {
   User? get user => _user;
   bool get isAuth => _isAuth;
 
-  final dio = Dio(BaseOptions(baseUrl: 'https://ovispa.saeta.app'));
+  final dio = Dio(BaseOptions(baseUrl: 'https://ovispa.saeta.app' ));
   
   Future<void> login(String email,String pass) async{
     try {
@@ -35,9 +35,14 @@ class AuthProvider extends ChangeNotifier {
   Future<void> checkAuthStatus()async{
     final local = await SharedPreferences.getInstance();
     final token = local.getString('token');
+
     if(token != null){
-      _isAuth = true;
-      notifyListeners();
+      final response = await dio.post('/auth/check',options: Options(headers: {'Authorization': 'Bearer $token'}));
+      final data = response.data;
+      if(data['success'] == true && response.statusCode == 200){
+        _isAuth = true;
+        notifyListeners();
+      }
     }
   }
 

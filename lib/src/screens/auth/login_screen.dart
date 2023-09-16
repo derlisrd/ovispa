@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:ovispaapp/src/providers/authprovider.dart';
 import 'package:ovispaapp/src/screens/auth/register_screen.dart';
 import 'package:ovispaapp/src/widgets/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
 
@@ -18,7 +19,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
  
+ Future<void> _checkAuthStatus() async {
+    // Aquí verifica el token almacenado en shared_preferences
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    print(token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
   }
+
+
+  
 
 
 
