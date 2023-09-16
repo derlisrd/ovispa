@@ -12,7 +12,7 @@ class AuthProvider extends ChangeNotifier {
   User? get user => _user;
   bool get isAuth => _isAuth;
 
-  final dio = Dio(BaseOptions(baseUrl: 'http://127.0.0.1:8000'));
+  final dio = Dio(BaseOptions(baseUrl: 'https://ovispa.saeta.app'));
   
   Future<void> login(String email,String pass) async{
     try {
@@ -28,7 +28,7 @@ class AuthProvider extends ChangeNotifier {
         throw Exception('Credenciales incorrectas');
       }
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 
@@ -41,11 +41,12 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> logout() async{
+  Future<bool> logout() async{
     final SharedPreferences local = await SharedPreferences.getInstance();
     local.remove('token');
     _isAuth = false;
     notifyListeners();
+    return true;
   }
 
 

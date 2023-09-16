@@ -27,10 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> trylogin() async{
     await authProvider.login(emailController.text, passController.text);
     if (authProvider.isAuth){
-      print(authProvider.user);
-      /* Navigator.pushReplacement(context, 
-        MaterialPageRoute(builder: (context) => HomeScreen(),)
-      ); */
+      if (!context.mounted) return;
+        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
   }
 
