@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AuthProvider extends ChangeNotifier {
-  bool _isAuth = true;
+  bool _isAuth = false;
   User? _user;
 
   User? get user => _user;
