@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ovispaapp/src/screens/common/loadingscreen.dart';
 import 'package:ovispaapp/src/screens/home/homescreen.dart';
 import 'package:provider/provider.dart';
 import 'package:ovispaapp/src/providers/authprovider.dart';
@@ -18,7 +19,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  
+  bool _isLoading = true;
+
+
   @override
   void initState() {
     super.initState();
@@ -26,10 +29,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
  
  Future<void> _checkAuthStatus() async {
-    // Aquí verifica el token almacenado en shared_preferences
+   
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    print(token);
+    if(token!=null){
+      if (!context.mounted) return;
+        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    }
+    setState(() { _isLoading = false;});
   }
 
   @override
@@ -49,7 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
 
-    return  Scaffold(
+    return _isLoading
+        ? const LoadingScreen() : 
+      Scaffold(
       body: SafeArea(child: 
         SingleChildScrollView(
           child: Center(
